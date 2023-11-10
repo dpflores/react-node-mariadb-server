@@ -1,0 +1,39 @@
+version: "3"
+services:
+  client:
+    image: nginx:latest
+    container_name: web-dashboard
+    ports:
+      - "8080:80"
+    volumes:
+      - ./dashboard_build:/usr/share/nginx/html
+    restart: always
+    links:
+      - server
+
+  server:
+    build: ./node-db-server
+    # volumes:
+    #   - ./node-db-server:/usr/src/app
+    container_name: node-server
+    restart: always
+    ports:
+      - 8081:8081
+
+  db:
+    image: linuxserver/mariadb:10.6.13
+    container_name: mariadb
+    volumes:
+      - ./mariadb-database/mariadb-data:/config
+    privileged: true
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      PUID: 1000
+      PGID: 1000
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      TZ: America/Lima
