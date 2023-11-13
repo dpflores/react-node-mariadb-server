@@ -14,7 +14,7 @@ const linkClasses =
 export default function Sidebar() {
   const handleLogout = () => {
     axios
-      .get("http://localhost:8081/logout")
+      .get("/api/logout")
       .then((res) => {
         window.location.reload(true);
       })

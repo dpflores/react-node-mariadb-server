@@ -5,7 +5,7 @@ services:
     # container_name: mariadb
     volumes:
       - ./mariadb/mariadb-data:/config
-    privileged: true
+    # privileged: true
     restart: always
     ports:
       - 3306:3306
@@ -18,16 +18,16 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       TZ: America/Lima
 
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
-    ports:
-      - 3050:80
+  # nginx:
+  #   depends_on:
+  #     - api
+  #     - client
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #     context: ./nginx
+  #   ports:
+  #     - 3050:80
 
   api:
     build:
@@ -37,15 +37,15 @@ services:
       - /app/node_modules
       - ./server:/app
     environment:
-      - ACME_INTERNAL_PASSWORD="121383Loco!"
-      - DB_USER="acme"
-      - DB_NAME="acme_db"
-      - DB_HOST="db"
-      - DB_PORT="3306"
+      - ACME_INTERNAL_PASSWORD=121383Loco!
+      - DB_USER=acme
+      - DB_NAME=acme_db
+      - DB_HOST=db
+      - DB_PORT=3306
     # container_name: node-server
     restart: always
-    # ports:
-    #   - 8081:8081
+    ports:
+      - 9000:9000
 
   client:
     stdin_open: true
@@ -55,3 +55,5 @@ services:
     volumes:
       - /app/node_modules
       - ./client:/app
+    ports:
+      - 3000:3000

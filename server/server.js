@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 // app.use(
 //   cors({
-//     origin: ["http://localhost:8080"],
+//     origin: ["http://localhost:3050"],
 //     methods: ["GET", "POST"],
 //     credentials: true,
 //   })
@@ -43,6 +43,13 @@ const db = mysql.createConnection({
   port: keys.dbPort,
 });
 
+db.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log("MySql connected");
+});
+
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
   console.log(token);
@@ -60,24 +67,24 @@ const verifyUser = (req, res, next) => {
   }
 };
 
-app.get("/", verifyUser, (req, res) => {
+app.get("/api", verifyUser, (req, res) => {
   console.log(req.username);
   res.send("Hello");
   return res.json({ Status: "Success", username: req.username });
 });
 
-app.get("/auth", verifyUser, (req, res) => {
+app.get("/api/auth", verifyUser, (req, res) => {
   console.log(req.username);
-  res.send("Hello");
+  // res.send("Hello");
   return res.json({ Status: "Success", username: req.username });
 });
 
-app.get("/logout", (req, res) => {
+app.get("/api/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ Status: "Success" });
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
   const sql = "SELECT * FROM users WHERE email = ? AND password = ? ";
   db.query(sql, [req.body.email, req.body.password], (err, data) => {
     if (err) return res.json({ Errror: "Log in error server" });
@@ -95,6 +102,6 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.listen(8081, () => {
-  console.log("Server is running on port 8081");
+app.listen(9000, () => {
+  console.log("Server is running on port 9000");
 });
