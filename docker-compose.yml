@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: ${DOCKERFILE}
       context: ./server
     volumes:
       - /app/node_modules
@@ -40,7 +40,7 @@ services:
       - api
     stdin_open: true
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: ${DOCKERFILE}
       context: ./client
     volumes:
       - /app/node_modules
