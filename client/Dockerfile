@@ -1,16 +1,16 @@
-FROM node:16-alpine as build
+# FROM node:16-alpine as build
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY package*.json ./
+# COPY package*.json ./
 
-RUN yarn install
+# RUN yarn install
 
-COPY . .
+# COPY . .
 
-RUN yarn build
+# RUN yarn build
 
 FROM nginx
 EXPOSE 3000
 COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/build /usr/share/nginx/html
+COPY /app/build /usr/share/nginx/html
