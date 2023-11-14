@@ -2,10 +2,8 @@ version: "3"
 services:
   db:
     image: linuxserver/mariadb:10.6.13
-    # container_name: mariadb
     volumes:
       - ./mariadb/mariadb-data:/config
-    # privileged: true
     restart: always
     ports:
       - 3306:3306
@@ -17,17 +15,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       TZ: America/Lima
-
-  # nginx:
-  #   depends_on:
-  #     - api
-  #     - client
-  #   restart: always
-  #   build:
-  #     dockerfile: Dockerfile.dev
-  #     context: ./nginx
-  #   ports:
-  #     - 3050:80
 
   api:
     build:
@@ -42,7 +29,6 @@ services:
       - DB_NAME=acme_db
       - DB_HOST=db
       - DB_PORT=3306
-    # container_name: node-server
     restart: always
     ports:
       - 9000:9000
