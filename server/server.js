@@ -41,6 +41,7 @@ const db = mysql.createConnection({
   password: keys.dbPassword,
   database: keys.dbName,
   port: keys.dbPort,
+  timeout: 60000,
 });
 
 db.connect((err) => {
@@ -61,22 +62,23 @@ const verifyUser = (req, res, next) => {
         return res.json({ Error: "Token not okay" });
       } else {
         req.username = decoded.username;
+        req.rol = decoded.rol;
         next();
       }
     });
   }
 };
 
-app.get("/api", verifyUser, (req, res) => {
-  console.log(req.username);
-  res.send("Hello");
-  return res.json({ Status: "Success", username: req.username });
-});
+// app.get("/api", verifyUser, (req, res) => {
+//   console.log(req.username);
+//   res.send("Hello");
+//   return res.json({ Status: "Success", username: req.username });
+// });
 
 app.get("/api/auth", verifyUser, (req, res) => {
   console.log(req.username);
   // res.send("Hello");
-  return res.json({ Status: "Success", username: req.username });
+  return res.json({ Status: "Success", username: req.username, rol: req.rol });
 });
 
 app.get("/api/logout", (req, res) => {
@@ -90,9 +92,11 @@ app.post("/api/login", (req, res) => {
     if (err) return res.json({ Errror: "Log in error server" });
     if (data.length > 0) {
       const username = data[0].username;
-      const token = jwt.sign({ username }, "jwt-secret-key", {
+      const rol = data[0].rol;
+      const token = jwt.sign({ username, rol }, "jwt-secret-key", {
         expiresIn: "1d",
       });
+
       res.cookie("token", token);
       //   console.log(name);
       return res.json({ Status: "Success" });

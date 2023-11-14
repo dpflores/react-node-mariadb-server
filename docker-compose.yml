@@ -17,6 +17,8 @@ services:
       TZ: America/Lima
 
   api:
+    depends_on:
+      - db
     build:
       dockerfile: Dockerfile.dev
       context: ./server
@@ -34,6 +36,8 @@ services:
       - 9000:9000
 
   client:
+    depends_on:
+      - api
     stdin_open: true
     build:
       dockerfile: Dockerfile.dev

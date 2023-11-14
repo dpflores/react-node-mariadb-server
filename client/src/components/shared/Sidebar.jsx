@@ -11,7 +11,8 @@ import axios from "axios";
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-komatsu-blue-light no-underline hover:no-underline active:bg-komatsu-blue-light rounded-sm text-base text-decoration-none";
 
-export default function Sidebar() {
+export default function Sidebar({ userRol }) {
+  console.log(userRol);
   const handleLogout = () => {
     axios
       .get("/api/logout")
@@ -32,9 +33,11 @@ export default function Sidebar() {
         ))}
       </div>
       <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-100">
-        {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
-          <SidebarLink key={item.key} item={item} />
-        ))}
+        {userRol === "admin"
+          ? DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
+              <SidebarLink key={item.key} item={item} />
+            ))
+          : null}
 
         <Link
           to={"/login"}

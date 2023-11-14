@@ -7,6 +7,7 @@ import EstatusMensual2 from "./components/EstatusMensual2";
 import LoginView from "./components/Login";
 import { useEffect, useState } from "react";
 import { getHostPath, setHost, setHostNode } from "./utils/host";
+import Settings from "./components/Settings";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -26,6 +27,7 @@ function App() {
           <Route path="mensual1" element={<EstatusMensual1 />} />
           <Route path="mensual2" element={<EstatusMensual2 />} />
           <Route path="operation" element={<EstatusOperacion />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
 
         <Route path="login" element={<LoginView />} />

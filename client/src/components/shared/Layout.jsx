@@ -10,6 +10,7 @@ import { getHostNodePath } from "../../utils/host";
 
 export default function Layout() {
   const [auth, setAuth] = useState(false);
+  const [rol, setRol] = useState("");
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
@@ -23,11 +24,12 @@ export default function Layout() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setLoaded(true);
         if (res.data.Status === "Success") {
           setAuth(true);
           setName(res.data.username);
+          setRol(res.data.rol);
 
           //   navigate("/");
           //
@@ -52,7 +54,7 @@ export default function Layout() {
     <div className="flex flex-row bg-white-100 h-screen w-screen overflow-hidden">
       {loaded ? (
         <Fragment>
-          <Sidebar />
+          <Sidebar userRol={rol} />
 
           <div className="flex-1 overflow-auto">
             <Header />
