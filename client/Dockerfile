@@ -8,9 +8,9 @@
 
 # COPY . .
 
-# RUN yarn build
+# RUN yarn build 
 
 FROM nginx
 EXPOSE 3000
 COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-COPY /app/build /usr/share/nginx/html
+COPY ./build /usr/share/nginx/html
