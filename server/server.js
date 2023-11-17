@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import keys from "./keys.js";
 
-console.log(keys);
+// console.log(keys);
 dotenv.config();
 
 const app = express();
@@ -53,7 +53,7 @@ db.connect((err) => {
 
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
-  console.log(token);
+  // console.log(token);
   if (!token) {
     return res.json({ Error: "You are not authenticated" });
   } else {
