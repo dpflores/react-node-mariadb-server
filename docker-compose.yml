@@ -4,6 +4,7 @@ services:
     image: linuxserver/mariadb:10.6.13
     volumes:
       - ./mariadb/mariadb-data:/config
+    privileged: true
     restart: always
     ports:
       - 3306:3306
