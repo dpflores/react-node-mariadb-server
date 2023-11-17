@@ -36,7 +36,7 @@ function DatePickerComponent({ onRangeChange }) {
             label: <span aria-label="Current Time to End of Day">Hoy</span>,
             // value: () => [dayjs(), dayjs().endOf('day')], // 5.8.0+ support function
             // value del inicio del dia hasta ahora
-            value: () => [dayjs().startOf("day"), dayjs()], // 5.8.0+ support function
+            value: () => [dayjs().startOf("day"), dayjs().endOf("day")], // 5.8.0+ support function
           },
           ...rangePresets,
         ]}
