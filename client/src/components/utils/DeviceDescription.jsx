@@ -5,17 +5,25 @@ import { getHostPath } from "../../utils/host";
 export default function Description({ chartName, dataPath, dataRate = 10000 }) {
   const [status, setStatus] = useState(false);
 
-  useEffect(() => {
-    const fetchData = () => {
+  let isFetching = false;
+
+  const fetchData = () => {
+    if (!isFetching) {
+      isFetching = true;
       fetch(getHostPath(dataPath))
         .then((res) => res.json())
         .then((data) => {
           setStatus(data.status);
+          isFetching = false;
         })
         .catch((err) => {
           console.log(err.message);
+          isFetching = false;
         });
-    };
+    }
+  };
+
+  useEffect(() => {
     // Ejecutar fetchData inicialmente
     fetchData();
 

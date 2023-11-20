@@ -103,25 +103,33 @@ export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
     asyncFetch();
   };
 
+  let isFetching = false;
+
   const asyncFetch = () => {
-    fetch(getHostPath(dataPath), {
-      method: "POST",
-      body: JSON.stringify({ dateRange }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const { valoresX, valoresY } = getBellData(data);
-        setDataX(valoresX);
-        setDataY(valoresY);
-        console.log(valoresX);
-        // setPosts(data);
+    if (!isFetching) {
+      isFetching = true;
+      fetch(getHostPath(dataPath), {
+        method: "POST",
+        body: JSON.stringify({ dateRange }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          const { valoresX, valoresY } = getBellData(data);
+          setDataX(valoresX);
+          setDataY(valoresY);
+          console.log(valoresX);
+          isFetching = false;
+
+          // setPosts(data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          isFetching = false;
+        });
+    }
   };
 
   const ChartOptions = {

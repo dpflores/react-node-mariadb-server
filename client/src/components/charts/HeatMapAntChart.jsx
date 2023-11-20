@@ -24,49 +24,49 @@ export default function HeatMapAntChart({
   //   asyncFetch();
   // }, [dataPath]);
 
-
   const onRangeChange = (date_values, dateStrings) => {
     console.log(date_values);
     setDates(date_values.map((item) => Math.round(item.valueOf() / 1000)));
     console.log(dateRange);
   };
-  
+
   const onClickFunction = () => {
     console.log(dateRange);
     asyncFetch();
   };
 
-  
+  let isFetching = false;
 
   const asyncFetch = () => {
-    fetch(getHostPath(dataPath), {
-      method: "POST",
-      body: JSON.stringify({ dateRange }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-
-        setData(data);
-
-        // setPosts(data);
+    if (!isFetching) {
+      isFetching = true;
+      fetch(getHostPath(dataPath), {
+        method: "POST",
+        body: JSON.stringify({ dateRange }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+
+          setData(data);
+          isFetching = false;
+
+          // setPosts(data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          isFetching = false;
+        });
+    }
   };
 
   const DemoHeatmap = () => {
-    
-
     // useEffect(() => {
     //   asyncFetch();
     // }, []);
-
-    
 
     const config = {
       data,
@@ -140,10 +140,10 @@ export default function HeatMapAntChart({
 
       <div className="flex flex-row justify-center gap-4">
         <div>
-          <DatePickerComponent onRangeChange={onRangeChange}/>
+          <DatePickerComponent onRangeChange={onRangeChange} />
         </div>
 
-        <RefreshButton onClickFunction={onClickFunction}/>
+        <RefreshButton onClickFunction={onClickFunction} />
       </div>
     </div>
   );

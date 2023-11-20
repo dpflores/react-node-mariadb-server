@@ -106,21 +106,32 @@ export default function RealTimeChart({
   const [data1, setData1] = useState(array1);
   const [data2, setData2] = useState(array2);
 
-  useEffect(() => {
-    const fetchData = () => {
+  let isFetching = false;
+
+  const fetchData = () => {
+    if (!isFetching) {
+      isFetching = true;
+
       fetch(getHostPath(dataPath))
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
           setData1(data.array1);
           setData2(data.array2);
+          isFetching = false; // Marcar que la solicitud ha terminado
+
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
+          isFetching = false;
         });
-    };
+    }
+  };
+
+  useEffect(() => {
     // Ejecutar fetchData inicialmente
+
     fetchData();
 
     // Configurar un intervalo para ejecutar fetchData

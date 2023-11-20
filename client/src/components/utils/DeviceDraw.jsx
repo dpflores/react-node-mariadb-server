@@ -36,8 +36,11 @@ function Draw({ dataPath, dataRate = 10000 }) {
     setYPos(newPosition);
   };
 
-  useEffect(() => {
-    const fetchData = () => {
+  let isFetching = false;
+
+  const fetchData = () => {
+    if (!isFetching) {
+      isFetching = true;
       fetch(getHostPath(dataPath))
         .then((res) => res.json())
         .then((data) => {
@@ -46,12 +49,18 @@ function Draw({ dataPath, dataRate = 10000 }) {
           setYPos(data.rm9000.y_axis);
           setCarga1(data.carga_grua.carga1);
           setCarga2(data.carga_grua.carga2);
+          isFetching = false;
+
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
+          isFetching = false;
         });
-    };
+    }
+  };
+
+  useEffect(() => {
     // Ejecutar fetchData inicialmente
     fetchData();
 

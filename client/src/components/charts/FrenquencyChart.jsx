@@ -112,8 +112,11 @@ var data_init = [traceInitUE, traceInitUC, traceInitNU]; //,traceInitM];
 export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
   const [data_chart, setData] = useState(data_init);
 
-  useEffect(() => {
-    const fetchData = () => {
+  let isFetching = false;
+
+  const fetchData = () => {
+    if (!isFetching) {
+      isFetching = true;
       fetch(getHostPath(dataPath))
         .then((res) => res.json())
         .then((data) => {
@@ -134,12 +137,17 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
           }
 
           setData(trace);
+          isFetching = false;
+
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
         });
-    };
+    }
+  };
+
+  useEffect(() => {
     // Ejecutar fetchData inicialmente
     fetchData();
 
