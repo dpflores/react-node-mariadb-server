@@ -46,5 +46,6 @@ services:
     volumes:
       - /app/node_modules
       - ./client:/app
+    restart: always
     ports:
       - 3000:3000

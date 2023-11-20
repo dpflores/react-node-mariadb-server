@@ -35,7 +35,7 @@ app.use(
   })
 );
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: keys.dbHost,
   user: keys.dbUser,
   password: keys.dbPassword,
@@ -44,13 +44,13 @@ const db = mysql.createConnection({
   timeout: 60000,
 });
 
-db.connect((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log("MySql connected");
-});
-
+// db.connect((err) => {
+//   if (err) {
+//     console.error("Error connecting to MySQL:", err);
+//     return;
+//   }
+//   console.log("MySql connected");
+// });
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
   // console.log(token);
