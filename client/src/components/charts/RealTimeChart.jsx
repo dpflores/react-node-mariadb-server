@@ -6,6 +6,8 @@ import Highcharts from "highcharts/highstock";
 import { ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
 import { getHostPath } from "../../utils/host";
+import DatePickerComponent from "./components/DatePicker";
+import RefreshButton from "./components/RefreshButton";
 
 // Load Highcharts modules
 require("highcharts/indicators/indicators")(Highcharts);
@@ -106,13 +108,31 @@ export default function RealTimeChart({
   const [data1, setData1] = useState(array1);
   const [data2, setData2] = useState(array2);
 
+  const [dateRange, setDates] = useState([]);
+
+  const onRangeChange = (date_values, dateStrings) => {
+    console.log(date_values);
+    setDates(date_values.map((item) => Math.round(item.valueOf() / 1000)));
+    console.log(dateRange);
+  };
+
+  const onClickFunction = () => {
+    console.log(dateRange);
+    fetchData();
+  };
+
   let isFetching = false;
 
   const fetchData = () => {
     if (!isFetching) {
       isFetching = true;
-
-      fetch(getHostPath(dataPath))
+      fetch(getHostPath(dataPath), {
+        method: "POST",
+        body: JSON.stringify({ dateRange }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -128,20 +148,19 @@ export default function RealTimeChart({
         });
     }
   };
+  // useEffect(() => {
+  //   // Ejecutar fetchData inicialmente
 
-  useEffect(() => {
-    // Ejecutar fetchData inicialmente
+  //   fetchData();
 
-    fetchData();
+  //   // Configurar un intervalo para ejecutar fetchData
+  //   const intervalId = setInterval(fetchData, dataRate);
 
-    // Configurar un intervalo para ejecutar fetchData
-    const intervalId = setInterval(fetchData, dataRate);
-
-    // Limpieza cuando el componente se desmonta
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  //   // Limpieza cuando el componente se desmonta
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, []);
 
   const stockOptions = {
     series: [
@@ -290,6 +309,14 @@ export default function RealTimeChart({
         <ResponsiveContainer>
           <StockChart options={stockOptions} highcharts={Highcharts} />
         </ResponsiveContainer>
+      </div>
+
+      <div className="flex flex-row justify-center gap-4">
+        <div>
+          <DatePickerComponent onRangeChange={onRangeChange} />
+        </div>
+
+        <RefreshButton onClickFunction={onClickFunction} />
       </div>
     </Fragment>
   );

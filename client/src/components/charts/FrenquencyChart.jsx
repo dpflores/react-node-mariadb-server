@@ -3,7 +3,9 @@ import Plot from "react-plotly.js";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getHostPath } from "../../utils/host";
-
+import DatePickerComponent from "./components/DatePicker";
+import RefreshButton from "./components/RefreshButton";
+import { ResponsiveContainer } from "recharts";
 var nombresMeses = [
   "Enero",
   "Febrero",
@@ -114,6 +116,11 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
 
   let isFetching = false;
 
+  const onClickFunction = () => {
+    // console.log(dateRange);
+    fetchData();
+  };
+
   const fetchData = () => {
     if (!isFetching) {
       isFetching = true;
@@ -143,6 +150,7 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
         })
         .catch((err) => {
           console.log(err.message);
+          isFetching = false;
         });
     }
   };
@@ -152,12 +160,12 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
     fetchData();
 
     // Configurar un intervalo para ejecutar fetchData cada 500 milisegundos
-    const intervalId = setInterval(fetchData, dataRate);
+    // const intervalId = setInterval(fetchData, dataRate);
 
-    // Limpieza cuando el componente se desmonta
-    return () => {
-      clearInterval(intervalId);
-    };
+    // // Limpieza cuando el componente se desmonta
+    // return () => {
+    //   clearInterval(intervalId);
+    // };
   }, []);
 
   return (
@@ -165,9 +173,14 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
       {/* // <div className="bg-white p-4 rounded-sm border border-solid border-gray-200 flex flex-col flex-1"> */}
       <strong className="text-gray-700 font-medium">{chartName}</strong>
       <div className="overflow:hidden w-full h-full ">
-        <PlotlyChart data={data_chart} />
+        <ResponsiveContainer>
+          <PlotlyChart data={data_chart} />
+        </ResponsiveContainer>
       </div>
 
+      <div className="flex flex-row justify-center gap-4">
+        <RefreshButton onClickFunction={onClickFunction} />
+      </div>
       {/* // </div> */}
     </Fragment>
   );

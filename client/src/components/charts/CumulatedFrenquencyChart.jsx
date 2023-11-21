@@ -6,6 +6,7 @@ import Highcharts, { chart } from "highcharts/highstock";
 import { ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
 import { getHostPath } from "../../utils/host";
+import RefreshButton from "./components/RefreshButton";
 
 // Load Highcharts modules
 require("highcharts/indicators/indicators")(Highcharts);
@@ -25,6 +26,11 @@ export default function CumulatedFrequencyChart({
   const [data1, setData1] = useState(array1);
   const [data2, setData2] = useState(array2);
   let isFetching = false;
+
+  const onClickFunction = () => {
+    // console.log(dateRange);
+    fetchData();
+  };
 
   const fetchData = () => {
     if (!isFetching) {
@@ -51,12 +57,12 @@ export default function CumulatedFrequencyChart({
     fetchData();
 
     // Configurar un intervalo para ejecutar fetchData
-    const intervalId = setInterval(fetchData, dataRate);
+    // const intervalId = setInterval(fetchData, dataRate);
 
-    // Limpieza cuando el componente se desmonta
-    return () => {
-      clearInterval(intervalId);
-    };
+    // // Limpieza cuando el componente se desmonta
+    // return () => {
+    //   clearInterval(intervalId);
+    // };
   }, []);
 
   const chartOptions = {
@@ -196,6 +202,9 @@ export default function CumulatedFrequencyChart({
         <ResponsiveContainer>
           <Chart options={chartOptions} highcharts={Highcharts} />
         </ResponsiveContainer>
+      </div>
+      <div className="flex flex-row justify-center gap-4">
+        <RefreshButton onClickFunction={onClickFunction} />
       </div>
     </Fragment>
   );
