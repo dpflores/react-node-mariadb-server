@@ -7,6 +7,7 @@ import RefreshButton from "./components/RefreshButton";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getHostPath } from "../../utils/host";
+import useLocalStorage from "use-local-storage";
 
 require("highcharts/modules/histogram-bellcurve")(Highcharts);
 require("highcharts/indicators/indicators")(Highcharts);
@@ -81,8 +82,8 @@ function getBellData(datos) {
 export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
   const { valoresX, valoresY } = getIdealData(100, 20);
 
-  const [datax, setDataX] = useState([0]);
-  const [datay, setDataY] = useState([0]);
+  const [datax, setDataX] = useLocalStorage(`${dataPath}`, [0]);
+  const [datay, setDataY] = useLocalStorage(`${dataPath}2`, [0]);
 
   const [dateRange, setDates] = useState([]);
 

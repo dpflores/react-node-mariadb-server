@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getHostPath } from "../../utils/host";
+import useLocalStorage from "use-local-storage";
 export default function DeviceDraw({ chartName, dataPath, dataRate = 10000 }) {
   return (
     <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
@@ -15,11 +16,11 @@ export default function DeviceDraw({ chartName, dataPath, dataRate = 10000 }) {
 }
 
 function Draw({ dataPath, dataRate = 10000 }) {
-  const [x_pos, setXPos] = useState(0);
-  const [y_pos, setYPos] = useState(0);
+  const [x_pos, setXPos] = useLocalStorage(`${dataPath}`, 0);
+  const [y_pos, setYPos] = useLocalStorage(`${dataPath}2`, 0);
 
-  const [carga1, setCarga1] = useState(0);
-  const [carga2, setCarga2] = useState(0);
+  const [carga1, setCarga1] = useLocalStorage(`${dataPath}3`, 0);
+  const [carga2, setCarga2] = useLocalStorage(`${dataPath}4`, 0);
 
   var x_max = 75;
   var y_max = 38;

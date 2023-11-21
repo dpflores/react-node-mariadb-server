@@ -6,6 +6,9 @@ import { getHostPath } from "../../utils/host";
 import DatePickerComponent from "./components/DatePicker";
 import RefreshButton from "./components/RefreshButton";
 import { ResponsiveContainer } from "recharts";
+// import useSessionStorage from "react-use-sessionstorage";
+import useLocalStorage from "use-local-storage";
+
 var nombresMeses = [
   "Enero",
   "Febrero",
@@ -112,12 +115,12 @@ var traceInitUC = generateTrace(
 var data_init = [traceInitUE, traceInitUC, traceInitNU]; //,traceInitM];
 
 export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
-  const [data_chart, setData] = useState(data_init);
+  const [data_chart, setData] = useLocalStorage(`${dataPath}`, data_init);
 
+  // const [data_chart, setData] = useState(data_init);
   let isFetching = false;
 
   const onClickFunction = () => {
-    // console.log(dateRange);
     fetchData();
   };
 
@@ -127,11 +130,13 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
       fetch(getHostPath(dataPath))
         .then((res) => res.json())
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           var trace = [];
-          trace = [...data_init];
+          for (var i = 0; i < data_init.length; i++) {
+            trace.push(data_init[i]); // Copia los datos existentes de data_init
+          }
+          // trace = [...data_init];
           for (var i = 0; i < data.length; i++) {
-            console.log(data[i]);
             var traceAdd = generateTrace(
               data[i].hours,
               data[i].month,
@@ -142,7 +147,6 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
             );
             trace.push(traceAdd);
           }
-
           setData(trace);
           isFetching = false;
 
@@ -155,18 +159,18 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
     }
   };
 
-  useEffect(() => {
-    // Ejecutar fetchData inicialmente
-    fetchData();
+  // useEffect(() => {
+  //   // Ejecutar fetchData inicialmente
+  //   fetchData();
 
-    // Configurar un intervalo para ejecutar fetchData cada 500 milisegundos
-    // const intervalId = setInterval(fetchData, dataRate);
+  //   // Configurar un intervalo para ejecutar fetchData cada 500 milisegundos
+  //   // const intervalId = setInterval(fetchData, dataRate);
 
-    // // Limpieza cuando el componente se desmonta
-    // return () => {
-    //   clearInterval(intervalId);
-    // };
-  }, []);
+  //   // // Limpieza cuando el componente se desmonta
+  //   // return () => {
+  //   //   clearInterval(intervalId);
+  //   // };
+  // }, []);
 
   return (
     <Fragment>

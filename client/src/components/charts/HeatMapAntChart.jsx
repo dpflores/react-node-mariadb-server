@@ -9,13 +9,14 @@ import DatePickerComponent from "./components/DatePicker";
 import RefreshButton from "./components/RefreshButton";
 import layoutImage from "../images/layout.jpg";
 import { getHostPath } from "../../utils/host";
+import useLocalStorage from "use-local-storage";
 
 export default function HeatMapAntChart({
   chartName,
   dataPath,
   dataRate = 10000,
 }) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useLocalStorage(`${dataPath}`, []);
   const [dateRange, setDates] = useState([]);
 
   // INIT CHART

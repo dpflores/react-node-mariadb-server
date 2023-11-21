@@ -7,6 +7,7 @@ import { ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
 import { getHostPath } from "../../utils/host";
 import RefreshButton from "./components/RefreshButton";
+import useLocalStorage from "use-local-storage";
 
 // Load Highcharts modules
 require("highcharts/indicators/indicators")(Highcharts);
@@ -23,8 +24,8 @@ export default function CumulatedFrequencyChart({
   dataPath,
   dataRate,
 }) {
-  const [data1, setData1] = useState(array1);
-  const [data2, setData2] = useState(array2);
+  const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
+  const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
   let isFetching = false;
 
   const onClickFunction = () => {
@@ -52,18 +53,18 @@ export default function CumulatedFrequencyChart({
     }
   };
 
-  useEffect(() => {
-    // Ejecutar fetchData inicialmente
-    fetchData();
+  // useEffect(() => {
+  //   // Ejecutar fetchData inicialmente
+  //   fetchData();
 
-    // Configurar un intervalo para ejecutar fetchData
-    // const intervalId = setInterval(fetchData, dataRate);
+  //   // Configurar un intervalo para ejecutar fetchData
+  //   // const intervalId = setInterval(fetchData, dataRate);
 
-    // // Limpieza cuando el componente se desmonta
-    // return () => {
-    //   clearInterval(intervalId);
-    // };
-  }, []);
+  //   // // Limpieza cuando el componente se desmonta
+  //   // return () => {
+  //   //   clearInterval(intervalId);
+  //   // };
+  // }, []);
 
   const chartOptions = {
     chart: {
