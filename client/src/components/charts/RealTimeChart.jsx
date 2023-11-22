@@ -38,10 +38,15 @@ export default function RealTimeChart({
   dataPath,
   dataRate = 10000,
 }) {
-  const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
-  const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
+  // const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
+  // const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
+
+  const [data1, setData1] = useState(array1);
+  const [data2, setData2] = useState(array2);
 
   const [dateRange, setDates] = useState([]);
+
+  const [isFetching, setIsFetching] = useState(false);
 
   const onRangeChange = (date_values, dateStrings) => {
     console.log(date_values);
@@ -50,15 +55,19 @@ export default function RealTimeChart({
   };
 
   const onClickFunction = () => {
-    console.log(dateRange);
-    fetchData();
-  };
+    if (dateRange.length > 0) {
+      console.log(dateRange);
+      fetchData();
+      return;
+    }
 
-  let isFetching = false;
+    alert("Seleccione un rango de fechas");
+    // alert("Descargando datos...");
+  };
 
   const fetchData = () => {
     if (!isFetching) {
-      isFetching = true;
+      setIsFetching(true);
       fetch(getHostPath(dataPath), {
         method: "POST",
         body: JSON.stringify({ dateRange }),
@@ -71,13 +80,13 @@ export default function RealTimeChart({
           console.log(data);
           setData1(data.array1);
           setData2(data.array2);
-          isFetching = false; // Marcar que la solicitud ha terminado
+          setIsFetching(false); // Marcar que la solicitud ha terminado
 
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
-          isFetching = false;
+          setIsFetching(false);
         });
     }
   };
@@ -239,7 +248,12 @@ export default function RealTimeChart({
     <Fragment>
       <strong className="text-gray-700 font-medium">{chartName}</strong>
       <div className="h-full w-full mt-3 flex flex-1 text-xs ">
-        <ResponsiveContainer>
+        <ResponsiveContainer className={"relative"}>
+          {isFetching && (
+            <div className="absolute flex flex-row justify-center gap-4 items-center justify-center bg-white z-50 w-full h-full bg-opacity-70">
+              Loading...
+            </div>
+          )}
           <StockChart options={stockOptions} highcharts={Highcharts} />
         </ResponsiveContainer>
       </div>

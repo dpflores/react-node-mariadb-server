@@ -26,7 +26,7 @@ export default function CumulatedFrequencyChart({
 }) {
   const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
   const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
-  let isFetching = false;
+  const [isFetching, setIsFetching] = useState(false);
 
   const onClickFunction = () => {
     // console.log(dateRange);
@@ -35,20 +35,20 @@ export default function CumulatedFrequencyChart({
 
   const fetchData = () => {
     if (!isFetching) {
-      isFetching = true;
+      setIsFetching(true);
       fetch(getHostPath(dataPath))
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
           setData1(data.array1);
           setData2(data.array2);
-          isFetching = false;
+          setIsFetching(false);
 
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
-          isFetching = false;
+          setIsFetching(false);
         });
     }
   };
@@ -200,7 +200,12 @@ export default function CumulatedFrequencyChart({
     <Fragment>
       <strong className="text-gray-700 font-medium">{chartName}</strong>
       <div className=" mt-3 flex flex-1 text-xs ">
-        <ResponsiveContainer>
+        <ResponsiveContainer className={"relative"}>
+          {isFetching && (
+            <div className="absolute flex flex-row justify-center gap-4 items-center justify-center bg-white z-50 w-full h-full bg-opacity-70">
+              Loading...
+            </div>
+          )}
           <Chart options={chartOptions} highcharts={Highcharts} />
         </ResponsiveContainer>
       </div>

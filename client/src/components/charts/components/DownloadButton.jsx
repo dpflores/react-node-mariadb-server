@@ -2,6 +2,7 @@ import { Button } from "antd";
 import React, { Fragment } from "react";
 import { ConfigProvider } from "antd";
 import { getHostPath } from "../../../utils/host";
+import { useState } from "react";
 
 function downloadCSV(csv, filename) {
   var csvFile;
@@ -20,32 +21,44 @@ function downloadCSV(csv, filename) {
 }
 
 export default function DownloadButton({ dataPath, dateRange }) {
+  const [isFetching, setIsFetching] = useState(false);
+
   const fetchData = () => {
-    fetch(getHostPath(dataPath), {
-      method: "POST",
-      body: JSON.stringify({ dateRange }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-
-        downloadCSV(data.data, "data.csv");
-
-        // setPosts(data);
+    if (!isFetching) {
+      setIsFetching(true);
+      fetch(getHostPath(dataPath), {
+        method: "POST",
+        body: JSON.stringify({ dateRange }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+
+          downloadCSV(data.data, "data.csv");
+          setIsFetching(false);
+
+          // setPosts(data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          setIsFetching(false);
+        });
+    }
   };
   // Ejecutar fetchData inicialmente
 
   const onClickFunction = () => {
-    console.log(dateRange);
-    alert("Descargando datos...");
-    fetchData();
+    if (dateRange.length > 0) {
+      console.log(dateRange);
+      fetchData();
+      return;
+    }
+
+    alert("Seleccione un rango de fechas");
+    // alert("Descargando datos...");
   };
 
   return (
@@ -59,7 +72,7 @@ export default function DownloadButton({ dataPath, dateRange }) {
         }}
       >
         <Button type="primary" onClick={onClickFunction}>
-          Descargar
+          {isFetching ? <div>Descargando...</div> : "Descargar"}
         </Button>
       </ConfigProvider>
     </Fragment>

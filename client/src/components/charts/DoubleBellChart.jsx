@@ -93,6 +93,8 @@ export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
   //   asyncFetch();
   // }, [dataPath]);
 
+  const [isFetching, setIsFetching] = useState(false);
+
   const onRangeChange = (date_values, dateStrings) => {
     console.log(date_values);
     setDates(date_values.map((item) => Math.round(item.valueOf() / 1000)));
@@ -100,15 +102,19 @@ export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
   };
 
   const onClickFunction = () => {
-    console.log(dateRange);
-    asyncFetch();
+    if (dateRange.length > 0) {
+      console.log(dateRange);
+      fetchData();
+      return;
+    }
+
+    alert("Seleccione un rango de fechas");
+    // alert("Descargando datos...");
   };
 
-  let isFetching = false;
-
-  const asyncFetch = () => {
+  const fetchData = () => {
     if (!isFetching) {
-      isFetching = true;
+      setIsFetching(true);
       fetch(getHostPath(dataPath), {
         method: "POST",
         body: JSON.stringify({ dateRange }),
@@ -122,13 +128,13 @@ export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
           setDataX(valoresX);
           setDataY(valoresY);
           console.log(valoresX);
-          isFetching = false;
+          setIsFetching(false);
 
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
-          isFetching = false;
+          setIsFetching(false);
         });
     }
   };
@@ -225,7 +231,12 @@ export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
       </div>
 
       <div className="mt-3 flex flex-1 text-xs ">
-        <ResponsiveContainer>
+        <ResponsiveContainer className={"relative"}>
+          {isFetching && (
+            <div className="absolute flex flex-row justify-center gap-4 items-center justify-center bg-white z-50 w-full h-full bg-opacity-70">
+              Loading...
+            </div>
+          )}
           <Bell options={ChartOptions} highcharts={Highcharts} />
         </ResponsiveContainer>
       </div>

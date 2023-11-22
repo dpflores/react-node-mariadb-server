@@ -118,7 +118,7 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
   const [data_chart, setData] = useLocalStorage(`${dataPath}`, data_init);
 
   // const [data_chart, setData] = useState(data_init);
-  let isFetching = false;
+  const [isFetching, setIsFetching] = useState(false);
 
   const onClickFunction = () => {
     fetchData();
@@ -126,7 +126,7 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
 
   const fetchData = () => {
     if (!isFetching) {
-      isFetching = true;
+      setIsFetching(true);
       fetch(getHostPath(dataPath))
         .then((res) => res.json())
         .then((data) => {
@@ -148,13 +148,13 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
             trace.push(traceAdd);
           }
           setData(trace);
-          isFetching = false;
+          setIsFetching(false);
 
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
-          isFetching = false;
+          setIsFetching(false);
         });
     }
   };
@@ -177,7 +177,12 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
       {/* // <div className="bg-white p-4 rounded-sm border border-solid border-gray-200 flex flex-col flex-1"> */}
       <strong className="text-gray-700 font-medium">{chartName}</strong>
       <div className="overflow:hidden w-full h-full ">
-        <ResponsiveContainer>
+        <ResponsiveContainer className={"relative"}>
+          {isFetching && (
+            <div className="absolute flex flex-row justify-center gap-4 items-center justify-center bg-white z-50 w-full h-full bg-opacity-70">
+              Loading...
+            </div>
+          )}
           <PlotlyChart data={data_chart} />
         </ResponsiveContainer>
       </div>

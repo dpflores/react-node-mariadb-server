@@ -19,11 +19,7 @@ export default function HeatMapAntChart({
   const [data, setData] = useLocalStorage(`${dataPath}`, []);
   const [dateRange, setDates] = useState([]);
 
-  // INIT CHART
-  // useEffect(() => {
-  //   // Llamar a asyncFetch inmediatamente al cargar el componente.
-  //   asyncFetch();
-  // }, [dataPath]);
+  const [isFetching, setIsFetching] = useState(false);
 
   const onRangeChange = (date_values, dateStrings) => {
     console.log(date_values);
@@ -32,15 +28,19 @@ export default function HeatMapAntChart({
   };
 
   const onClickFunction = () => {
-    console.log(dateRange);
-    asyncFetch();
+    if (dateRange.length > 0) {
+      console.log(dateRange);
+      fetchData();
+      return;
+    }
+
+    alert("Seleccione un rango de fechas");
+    // alert("Descargando datos...");
   };
 
-  let isFetching = false;
-
-  const asyncFetch = () => {
+  const fetchData = () => {
     if (!isFetching) {
-      isFetching = true;
+      setIsFetching(true);
       fetch(getHostPath(dataPath), {
         method: "POST",
         body: JSON.stringify({ dateRange }),
@@ -53,13 +53,13 @@ export default function HeatMapAntChart({
           console.log(data);
 
           setData(data);
-          isFetching = false;
+          setIsFetching(false);
 
           // setPosts(data);
         })
         .catch((err) => {
           console.log(err.message);
-          isFetching = false;
+          setIsFetching(false);
         });
     }
   };
@@ -134,7 +134,12 @@ export default function HeatMapAntChart({
     <div>
       <strong className="text-gray-700 font-medium">{chartName}</strong>
       <div className="mt-3 flex flex-1 text-xs">
-        <ResponsiveContainer>
+        <ResponsiveContainer className={"relative"}>
+          {isFetching && (
+            <div className="absolute flex flex-row justify-center gap-4 items-center justify-center bg-white z-50 w-full h-full bg-opacity-70">
+              Loading...
+            </div>
+          )}
           <DemoHeatmap />
         </ResponsiveContainer>
       </div>
