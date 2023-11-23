@@ -7,18 +7,12 @@ import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import keys from "./keys.js";
-
+import ChartsRouter from "./charts.js";
 // console.log(keys);
 dotenv.config();
 
 const app = express();
-// app.use(
-//   cors({
-//     origin: ["http://localhost:3050"],
-//     methods: ["GET", "POST"],
-//     credentials: true,
-//   })
-// );
+
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -105,6 +99,8 @@ app.post("/api/login", (req, res) => {
     }
   });
 });
+
+app.use("/api/charts", ChartsRouter);
 
 app.listen(9000, () => {
   console.log("Server is running on port 9000");

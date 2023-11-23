@@ -26,24 +26,35 @@ export default function EstatusMensual2() {
       <div className="col-span-1 flex flex-col gap-4">
         <Box>
           <HeatMapAntChart
-            chartName={"Heatmap 1"}
+            chartName={"Heatmap 1 (Repeticiones)"}
             dataPath={"heat1"}
             dataRate={10000}
           />
         </Box>
 
         <Box>
-          {/* <BarChart chartName={"Bar Chart 1"} dataPath={"barchart1"} /> */}
+          <HeatMapAntChart
+            chartName={"Heatmap 1-1 (Promedio Peso)"}
+            dataPath={"heat11"}
+            dataRate={10000}
+          />
         </Box>
       </div>
 
       <div className="col-span-1 flex flex-col gap-4">
         <Box>
-          <HeatMapAntChart chartName={"Heatmap 2"} dataPath={"heat2"} />
+          <HeatMapAntChart
+            chartName={"Heatmap 2 (Repeticiones)"}
+            dataPath={"heat2"}
+          />
         </Box>
 
         <Box>
-          {/* <BarChart chartName={"Bar Chart 2"} dataPath={"barchart2"} /> */}
+          <HeatMapAntChart
+            chartName={"Heatmap 2-2 (Promedio Peso)"}
+            dataPath={"heat22"}
+            dataRate={10000}
+          />
         </Box>
       </div>
     </div>
