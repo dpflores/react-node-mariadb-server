@@ -26,9 +26,9 @@ const rangePresets = [
   },
 ];
 
-function DatePickerComponent({ onRangeChange }) {
+function DatePickerComponent({ onRangeChange, width = "100%" }) {
   return (
-    <Space direction="vertical" size={12}>
+    <Space direction="vertical" size={12} style={{ width: width }}>
       {/* <RangePicker presets={rangePresets} onChange={onRangeChange} /> */}
       <RangePicker
         presets={[

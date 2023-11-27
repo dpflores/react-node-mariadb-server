@@ -20,7 +20,7 @@ function downloadCSV(csv, filename) {
   document.body.removeChild(downloadLink);
 }
 
-export default function DownloadButton({ dataPath, dateRange }) {
+export default function DownloadButton({ dataPath, dateRange, width = "15%" }) {
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchData = () => {
@@ -71,7 +71,11 @@ export default function DownloadButton({ dataPath, dateRange }) {
           },
         }}
       >
-        <Button type="primary" onClick={onClickFunction}>
+        <Button
+          type="primary"
+          onClick={onClickFunction}
+          style={{ width: width }}
+        >
           {isFetching ? <div>Descargando...</div> : "Descargar"}
         </Button>
       </ConfigProvider>

@@ -1,6 +1,6 @@
 import React from "react";
 import BarChart from "./charts/BarChart";
-import HeatMapAntChart from "./charts/HeatMapAntChart";
+import HeatMapAntChart from "./charts/HeatMapAntChart2";
 import Box from "./shared/Box";
 import axios from "axios";
 import { useEffect, useState } from "react";

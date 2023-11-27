@@ -263,7 +263,7 @@ export default function RealTimeChart({
           <DatePickerComponent onRangeChange={onRangeChange} />
         </div>
 
-        <RefreshButton onClickFunction={onClickFunction} />
+        <RefreshButton width="15%" onClickFunction={onClickFunction} />
       </div>
     </Fragment>
   );

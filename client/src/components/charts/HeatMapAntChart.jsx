@@ -144,13 +144,22 @@ export default function HeatMapAntChart({
         </ResponsiveContainer>
       </div>
 
-      <div className="flex flex-row justify-center gap-4">
-        <div>
-          <DatePickerComponent onRangeChange={onRangeChange} />
-        </div>
+      <FilterDates
+        onRangeChange={onRangeChange}
+        onClickFunction={onClickFunction}
+      />
+    </div>
+  );
+}
 
-        <RefreshButton onClickFunction={onClickFunction} />
+export function FilterDates({ onRangeChange, onClickFunction }) {
+  return (
+    <div className="flex flex-row justify-center gap-4">
+      <div>
+        <DatePickerComponent onRangeChange={onRangeChange} />
       </div>
+
+      <RefreshButton onClickFunction={onClickFunction} />
     </div>
   );
 }

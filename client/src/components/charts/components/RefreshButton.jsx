@@ -2,7 +2,7 @@ import { Button } from "antd";
 import React, { Fragment } from "react";
 import { ConfigProvider } from "antd";
 
-export default function RefreshButton({ onClickFunction }) {
+export default function RefreshButton({ onClickFunction, width = "25%" }) {
   return (
     <Fragment>
       <ConfigProvider
@@ -13,7 +13,11 @@ export default function RefreshButton({ onClickFunction }) {
           },
         }}
       >
-        <Button type="primary" onClick={onClickFunction}>
+        <Button
+          type="primary"
+          onClick={onClickFunction}
+          style={{ width: width }}
+        >
           Actualizar
         </Button>
       </ConfigProvider>
