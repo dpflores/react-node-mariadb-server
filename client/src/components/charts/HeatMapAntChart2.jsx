@@ -224,8 +224,8 @@ export function NumberRange({ label1, label2, units, width, value, onChange }) {
         placeholder={label2}
         style={{ width: "100%" }}
         // defaultValue={100}
-        min={0}
-        max={100}
+        // min={0}
+        // max={100}
         // formatter={(value) => `${value} Ton.`}
         // parser={(value) => value.replace("Ton.", "")}
         onChange={on2Change}
@@ -337,7 +337,7 @@ export function FormFilter({ width = "70%", formName, fetchData }) {
       <Form.Item
         name="weight-filter"
         label="Rango de pesos (Tn.)"
-        {...rangeConfig}
+        // {...rangeConfig}
       >
         <NumberRange
           label1={"Peso Inicial"}
@@ -350,7 +350,7 @@ export function FormFilter({ width = "70%", formName, fetchData }) {
       <Form.Item
         name="height-filter"
         label="Rango de Alturas (m)"
-        {...rangeConfig}
+        // {...rangeConfig}
       >
         <NumberRange
           label1={"Altura Inicial"}
@@ -360,7 +360,11 @@ export function FormFilter({ width = "70%", formName, fetchData }) {
         />
       </Form.Item>
 
-      <Form.Item name="state-filter" label="Estado" {...config}>
+      <Form.Item
+        name="state-filter"
+        label="Estado"
+        // {...config}
+      >
         <SelectState label={"Seleccione el estado"} width={width} />
       </Form.Item>
 
