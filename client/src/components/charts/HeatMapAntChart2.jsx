@@ -5,14 +5,17 @@ import { Heatmap } from "@ant-design/plots";
 
 import { useState } from "react";
 import { useEffect } from "react";
+import DatePickerForm from "./components/DatePickerForm";
 import DatePickerComponent from "./components/DatePicker";
 import RefreshButton from "./components/RefreshButton";
+import SubmitButton from "./components/SubmitButton";
 import layoutImage from "../images/layout.jpg";
 import { getHostPath } from "../../utils/host";
 import useLocalStorage from "use-local-storage";
 import { InputNumber, Space, Select } from "antd";
 import { Button, DatePicker, Form, TimePicker } from "antd";
 
+const { RangePicker } = DatePicker;
 export default function HeatMapAntChart({
   chartName,
   dataPath,
@@ -23,29 +26,14 @@ export default function HeatMapAntChart({
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const onRangeChange = (date_values, dateStrings) => {
-    console.log(date_values);
-    setDates(date_values.map((item) => Math.round(item.valueOf() / 1000)));
-    console.log(dateRange);
-  };
+  // const [heatFilters, setHeatFilters] = useState({});
 
-  const onClickFunction = () => {
-    if (dateRange.length > 0) {
-      console.log(dateRange);
-      fetchData();
-      return;
-    }
-
-    alert("Seleccione un rango de fechas");
-    // alert("Descargando datos...");
-  };
-
-  const fetchData = () => {
+  const fetchData = ({ filters }) => {
     if (!isFetching) {
       setIsFetching(true);
       fetch(getHostPath(dataPath), {
         method: "POST",
-        body: JSON.stringify({ dateRange }),
+        body: JSON.stringify({ filters }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -146,10 +134,7 @@ export default function HeatMapAntChart({
         </ResponsiveContainer>
       </div>
 
-      <FormFilter
-        onRangeChange={onRangeChange}
-        onClickFunction={onClickFunction}
-      />
+      <FormFilter formName={dataPath} fetchData={fetchData} />
     </div>
   );
 }
@@ -166,37 +151,61 @@ export default function HeatMapAntChart({
 //   );
 // }
 
-export function MultipleFilters({ onRangeChange, onClickFunction }) {
-  return (
-    <div className="flex flex-col justify-center gap-4">
-      <div className="flex flex-row justify-center gap-4">
-        <DatePickerComponent onRangeChange={onRangeChange} width="50%" />
-        <NumberRange
-          label1={"Peso Inicial"}
-          label2={"Peso Final"}
-          units={"Ton."}
-        />
-      </div>
+// export function MultipleFilters({ onRangeChange, onClickFunction }) {
+//   return (
+//     <div className="flex flex-col justify-center gap-4">
+//       <div className="flex flex-row justify-center gap-4">
+//         <DatePickerComponent onRangeChange={onRangeChange} width="50%" />
+//         <NumberRange
+//           label1={"Peso Inicial"}
+//           label2={"Peso Final"}
+//           units={"Ton."}
+//         />
+//       </div>
 
-      <div className="flex flex-row justify-center gap-4">
-        <SelectState label={"Select State"} />
-        <NumberRange
-          label1={"Altura Inicial"}
-          label2={"Altura Final"}
-          units={"m"}
-        />
-      </div>
+//       <div className="flex flex-row justify-center gap-4">
+//         <SelectState label={"Select State"} />
+//         <NumberRange
+//           label1={"Altura Inicial"}
+//           label2={"Altura Final"}
+//           units={"m"}
+//         />
+//       </div>
 
-      <RefreshButton onClickFunction={onClickFunction} />
-    </div>
-  );
-}
+//       <RefreshButton onClickFunction={onClickFunction} />
+//     </div>
+//   );
+// }
 
-const onChange = (value) => {
-  console.log("changed", value);
-};
+export function NumberRange({ label1, label2, units, width, value, onChange }) {
+  const on1Change = (val) => {
+    const current = value ? [...value] : [];
+    current[0] = val;
 
-export function NumberRange({ label1, label2, units, width }) {
+    if (current[0] > current[1]) {
+      alert("El valor inicial no puede ser mayor al valor final");
+      current[0] = current[1];
+    }
+    if (current[0] === null) {
+      current[0] = 0;
+      console.log("here");
+    }
+
+    onChange(current);
+  };
+
+  const on2Change = (val) => {
+    const current = value ? [...value] : [];
+    current[1] = val;
+    if (current[0] > current[1]) {
+      alert("El valor inicial no puede ser mayor al valor final");
+      current[1] = current[0];
+    }
+    if (current[1] === null) {
+      current[1] = 0;
+    }
+    onChange(current);
+  };
   return (
     <Space.Compact block style={{ width: width }}>
       <InputNumber
@@ -207,7 +216,8 @@ export function NumberRange({ label1, label2, units, width }) {
         //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         // }
         // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        onChange={onChange}
+        onChange={on1Change}
+        value={value ? value[0] : null}
       />
       <InputNumber
         // addonAfter={units}
@@ -218,17 +228,24 @@ export function NumberRange({ label1, label2, units, width }) {
         max={100}
         // formatter={(value) => `${value} Ton.`}
         // parser={(value) => value.replace("Ton.", "")}
-        onChange={onChange}
+        onChange={on2Change}
+        value={value ? value[1] : null}
       />
     </Space.Compact>
   );
 }
 
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
+// const handleChange = (value) => {
+//   console.log(`selected ${value}`);
+// };
 
-export function SelectState({ label, width }) {
+export function SelectState({ label, width, value, onChange }) {
+  const handleChange = (val) => {
+    let current = value ? [...value] : "";
+    current = val;
+    onChange(current);
+  };
+
   return (
     <Select
       placeholder={label}
@@ -242,72 +259,70 @@ export function SelectState({ label, width }) {
   );
 }
 
-const { RangePicker } = DatePicker;
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
+export function FormFilter({ width = "70%", formName, fetchData }) {
+  const formItemLayout = {
+    labelCol: {
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 8,
+      },
     },
-    sm: {
-      span: 8,
+    wrapperCol: {
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 16,
+      },
     },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
-  },
-};
-const config = {
-  rules: [
-    {
-      type: "object",
-      required: true,
-      message: "Seleccione un estado",
-    },
-  ],
-};
-const rangeConfig = {
-  rules: [
-    {
-      type: "array",
-      required: true,
-      message: "Seleccione un rango",
-    },
-  ],
-};
-const onFinish = (fieldsValue) => {
-  // Should format date value before submit.
-  const rangeValue = fieldsValue["range-picker"];
-  const rangeTimeValue = fieldsValue["range-time-picker"];
-  const values = {
-    ...fieldsValue,
-    "date-picker": fieldsValue["date-picker"].format("YYYY-MM-DD"),
-    "date-time-picker": fieldsValue["date-time-picker"].format(
-      "YYYY-MM-DD HH:mm:ss"
-    ),
-    "month-picker": fieldsValue["month-picker"].format("YYYY-MM"),
-    "range-picker": [
-      rangeValue[0].format("YYYY-MM-DD"),
-      rangeValue[1].format("YYYY-MM-DD"),
-    ],
-    "range-time-picker": [
-      rangeTimeValue[0].format("YYYY-MM-DD HH:mm:ss"),
-      rangeTimeValue[1].format("YYYY-MM-DD HH:mm:ss"),
-    ],
-    "time-picker": fieldsValue["time-picker"].format("HH:mm:ss"),
   };
-  console.log("Received values of form: ", values);
-};
-export function FormFilter({ width = "70%" }) {
+  const config = {
+    rules: [
+      {
+        type: "string",
+        required: true,
+        message: "Seleccione un estado",
+      },
+    ],
+  };
+  const rangeConfig = {
+    rules: [
+      {
+        type: "array",
+        required: true,
+        message: "Seleccione un rango",
+      },
+    ],
+  };
+  const onFinish = (fieldsValue) => {
+    // Should format date value before submit.
+    console.log("here");
+    console.log(fieldsValue);
+    const values = {
+      ...fieldsValue,
+      dateRange: fieldsValue["range-time-picker"].map((item) =>
+        Math.round(item.valueOf() / 1000)
+      ),
+      weightRange: fieldsValue["weight-filter"],
+      heightRange: fieldsValue["height-filter"],
+      stateFilter: fieldsValue["state-filter"],
+    };
+
+    fetchData({ filters: values });
+    console.log("Received values of form: ", values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
     <Form
-      name="time_related_controls"
+      name={formName}
       {...formItemLayout}
       onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
       style={{ width: "100%" }}
     >
       <Form.Item
@@ -315,7 +330,8 @@ export function FormFilter({ width = "70%" }) {
         label="Rango de fechas"
         {...rangeConfig}
       >
-        <DatePickerComponent width={width} />
+        <DatePickerForm width={width} />
+        {/* <DatePicker /> */}
       </Form.Item>
 
       <Form.Item
@@ -354,7 +370,7 @@ export function FormFilter({ width = "70%" }) {
           sm: { span: 16, offset: 8 },
         }}
       >
-        <RefreshButton width={width} />
+        <SubmitButton width={width} />
       </Form.Item>
     </Form>
   );
