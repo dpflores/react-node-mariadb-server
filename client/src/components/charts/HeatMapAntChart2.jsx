@@ -139,44 +139,6 @@ export default function HeatMapAntChart({
   );
 }
 
-// export function FilterDates({ onRangeChange, onClickFunction }) {
-//   return (
-//     <div className="flex flex-row justify-center gap-4">
-//       <div>
-//         <DatePickerComponent onRangeChange={onRangeChange} />
-//       </div>
-
-//       <RefreshButton onClickFunction={onClickFunction} />
-//     </div>
-//   );
-// }
-
-// export function MultipleFilters({ onRangeChange, onClickFunction }) {
-//   return (
-//     <div className="flex flex-col justify-center gap-4">
-//       <div className="flex flex-row justify-center gap-4">
-//         <DatePickerComponent onRangeChange={onRangeChange} width="50%" />
-//         <NumberRange
-//           label1={"Peso Inicial"}
-//           label2={"Peso Final"}
-//           units={"Ton."}
-//         />
-//       </div>
-
-//       <div className="flex flex-row justify-center gap-4">
-//         <SelectState label={"Select State"} />
-//         <NumberRange
-//           label1={"Altura Inicial"}
-//           label2={"Altura Final"}
-//           units={"m"}
-//         />
-//       </div>
-
-//       <RefreshButton onClickFunction={onClickFunction} />
-//     </div>
-//   );
-// }
-
 export function NumberRange({ label1, label2, units, width, value, onChange }) {
   const on1Change = (val) => {
     const current = value ? [...value] : [];
