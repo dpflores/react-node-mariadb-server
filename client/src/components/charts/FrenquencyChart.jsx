@@ -115,8 +115,8 @@ var traceInitUC = generateTrace(
 var data_init = [traceInitUE, traceInitUC, traceInitNU]; //,traceInitM];
 
 export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
-  // const [data_chart, setData] = useLocalStorage(`${dataPath}`, data_init);
-  const [data_chart, setData] = useState(data_init);
+  const [data_chart, setData] = useLocalStorage(`${dataPath}`, data_init);
+  // const [data_chart, setData] = useState(data_init);
 
   // const [data_chart, setData] = useState(data_init);
   const [isFetching, setIsFetching] = useState(false);

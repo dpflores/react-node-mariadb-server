@@ -4,8 +4,8 @@ import { getHostPath } from "../../utils/host";
 import useLocalStorage from "use-local-storage";
 
 export default function Description({ chartName, dataPath, dataRate = 10000 }) {
-  // const [status, setStatus] = useLocalStorage(`${dataPath}`, false);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useLocalStorage(`${dataPath}`, false);
+  // const [status, setStatus] = useState(false);
 
   let isFetching = false;
 
