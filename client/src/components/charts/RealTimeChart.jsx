@@ -248,7 +248,7 @@ export default function RealTimeChart({
     <Fragment>
       <strong className="text-gray-700 font-medium">{chartName}</strong>
       <div className="h-full w-full mt-3 flex flex-1 text-xs ">
-        <ResponsiveContainer className={"relative"}>
+        <ResponsiveContainer width="100%" height="100%" className={"relative"}>
           {isFetching && (
             <div className="absolute flex flex-row justify-center gap-4 items-center justify-center bg-white z-50 w-full h-full bg-opacity-70">
               Loading...

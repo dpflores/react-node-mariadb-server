@@ -21,7 +21,8 @@ export default function HeatMapAntChart({
   dataPath,
   dataRate = 10000,
 }) {
-  const [data, setData] = useLocalStorage(`${dataPath}`, []);
+  // const [data, setData] = useLocalStorage(`${dataPath}`, []);
+  const [data, setData] = useState([]);
   const [dateRange, setDates] = useState([]);
 
   const [isFetching, setIsFetching] = useState(false);

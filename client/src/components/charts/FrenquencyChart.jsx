@@ -115,7 +115,8 @@ var traceInitUC = generateTrace(
 var data_init = [traceInitUE, traceInitUC, traceInitNU]; //,traceInitM];
 
 export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
-  const [data_chart, setData] = useLocalStorage(`${dataPath}`, data_init);
+  // const [data_chart, setData] = useLocalStorage(`${dataPath}`, data_init);
+  const [data_chart, setData] = useState(data_init);
 
   // const [data_chart, setData] = useState(data_init);
   const [isFetching, setIsFetching] = useState(false);
@@ -174,7 +175,6 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
 
   return (
     <Fragment>
-      {/* // <div className="bg-white p-4 rounded-sm border border-solid border-gray-200 flex flex-col flex-1"> */}
       <strong className="text-gray-700 font-medium">{chartName}</strong>
       <div className="overflow:hidden w-full h-full ">
         <ResponsiveContainer className={"relative"}>
@@ -190,7 +190,6 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
       <div className="flex flex-row justify-center gap-4">
         <RefreshButton onClickFunction={onClickFunction} />
       </div>
-      {/* // </div> */}
     </Fragment>
   );
 }
