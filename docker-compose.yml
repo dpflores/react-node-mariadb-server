@@ -27,11 +27,12 @@ services:
       - /app/node_modules
       - ./server:/app
     environment:
-      - ACME_INTERNAL_PASSWORD=121383Loco!
-      - DB_USER=acme
-      - DB_NAME=acme_db
-      - DB_HOST=db
-      - DB_PORT=3306
+      ACME_INTERNAL_PASSWORD: ${MYSQL_PASSWORD}
+      DB_USER: ${MYSQL_USER}
+      DB_NAME: acme_db
+      DB_HOST: db
+      DB_PORT: 3306
+      TZ: America/Lima
     restart: always
     ports:
       - 9000:9000
