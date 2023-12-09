@@ -56,14 +56,14 @@ services:
     privileged: true
     restart: "always"
 
-    # network_mode: "host"
+    network_mode: "host"
 
     environment:
             TZ: America/Lima
-    ports:
-      - "1880:1880"
-    # networks:
-    #   - node-red-net
+    # ports:
+    #   - "1880:1880"
+    # # networks:
+    # #   - node-red-net
     # volumes:
     #   - node-red-data:/data
 
