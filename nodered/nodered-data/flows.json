@@ -1,0 +1,82 @@
+[
+    {
+        "id": "4270c1ea01789f22",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7e3eeafb9ca0e66b",
+        "type": "inject",
+        "z": "4270c1ea01789f22",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "25ca9a53d5109bc5",
+        "type": "debug",
+        "z": "4270c1ea01789f22",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "2ea90b7ffdc9c79e",
+        "type": "ping",
+        "z": "4270c1ea01789f22",
+        "protocol": "Automatic",
+        "mode": "timed",
+        "name": "",
+        "host": "192.168.192.144",
+        "timer": "1",
+        "inputs": 0,
+        "x": 260,
+        "y": 220,
+        "wires": [
+            [
+                "25ca9a53d5109bc5"
+            ]
+        ]
+    },
+    {
+        "id": "d31013837264fbad",
+        "type": "flat",
+        "z": "4270c1ea01789f22",
+        "name": "",
+        "x": 270,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    }
+]

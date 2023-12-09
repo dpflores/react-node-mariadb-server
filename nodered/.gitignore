@@ -1,0 +1,6 @@
+.env
+nodered-data/*
+!nodered-data/settings.js
+!nodered-data/flows.json
+!nodered-data/package.json
+# !nodered-data/package-lock.json
