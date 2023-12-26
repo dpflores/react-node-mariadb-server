@@ -5,8 +5,63 @@ import Box from "./shared/Box";
 import DoubleBellChart from "./charts/DoubleBellChart";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getHostNodePath } from "../utils/host";
+
+
+import { Cascader, Divider } from 'antd';
+
+const options = [
+  {
+    label: 'Lunes',
+    value: '0',
+  },
+  {
+    label: 'Martes',
+    value: '1',
+  },
+  {
+    label: 'Miercoles',
+    value: '2',
+  },
+  {
+    label: 'Jueves',
+    value: '3',
+  },
+  {
+    label: 'Viernes',
+    value: '4',
+  },
+  {
+    label: 'Sábado',
+    value: '5',
+  },
+  {
+    label: 'Domingo',
+    value: '6',
+  },
+  
+];
+const onChange = (value) => {
+  console.log(value);
+};
+
+const dropdownRender = (menus) => (
+  <div>
+    {menus}
+    <Divider
+      style={{
+        margin: 0,
+      }}
+    />
+    <div
+      style={{
+        padding: 8,
+      }}
+    >
+      Seleccione los días de trabajo
+    </div>
+  </div>
+);
+
 
 export default function Settings() {
   const [rol, setRol] = useState("");
@@ -51,37 +106,30 @@ export function SettingsDisplay() {
     <div className="grid grid-cols-2 w-full gap-4 p-4">
       <div className="col-span-1 flex flex-col gap-4">
         <Box>
-          <FrenquencyChart
-            dataPath={"frequency"}
-            chartName={"Frecuencia de uso mensual"}
-            dataRate={60000}
-          />
+        <Cascader placeholder="Días de la semana"
+        dropdownRender={dropdownRender}
+          style={{
+            width: '50%',
+          }}
+          options={options}
+          onChange={onChange}
+          multiple
+          maxTagCount="responsive"
+        />
         </Box>
 
         <Box>
-          <DoubleBellChart
-            dataPath={"bell1"}
-            chartName={"Gauss Chart 1"}
-            dataRate={60000}
-          />
+          
         </Box>
       </div>
 
       <div className="col-span-1 flex flex-col gap-4">
         <Box>
-          <CumulatedFrenquencyChart
-            dataPath={"cumulatedfrequency"}
-            chartName={"Frecuencia de usoawwa acumulada"}
-            dataRate={60000}
-          />
+         
         </Box>
 
         <Box>
-          <DoubleBellChart
-            dataPath={"bell2"}
-            chartName={"Gauss Chart 2"}
-            dataRate={60000}
-          />
+         
         </Box>
       </div>
     </div>

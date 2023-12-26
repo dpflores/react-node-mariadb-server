@@ -5,7 +5,6 @@ import Chart from "./highcharts/Chart";
 import Highcharts, { chart } from "highcharts/highstock";
 import { ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
-import { getHostPath } from "../../utils/host";
 import RefreshButton from "./components/RefreshButton";
 import useLocalStorage from "use-local-storage";
 
@@ -23,6 +22,7 @@ export default function CumulatedFrequencyChart({
   chartName,
   dataPath,
   dataRate,
+  serverType
 }) {
   const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
   const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
@@ -39,12 +39,12 @@ export default function CumulatedFrequencyChart({
   const fetchData = () => {
     if (!isFetching) {
       setIsFetching(true);
-      fetch(getHostPath(dataPath))
+      fetch(`api/${serverType}/${dataPath}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          setData1(data.array1);
-          setData2(data.array2);
+          console.log(data.payload);
+          setData1(data.payload.array1);
+          setData2(data.payload.array2);
           setIsFetching(false);
 
           // setPosts(data);

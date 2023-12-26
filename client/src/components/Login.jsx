@@ -39,7 +39,7 @@ export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("/api/login", values)
+      .post("/api/auth/login", values)
       .then((res) => {
         if (res.data.Status === "Success") {
           navigate("/");

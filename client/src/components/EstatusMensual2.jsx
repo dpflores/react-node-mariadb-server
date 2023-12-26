@@ -26,6 +26,7 @@ export default function EstatusMensual2() {
       <div className="col-span-1 flex flex-col gap-4">
         <Box>
           <HeatMapAntChart
+            serverType={"charts"}
             chartName={"Heatmap 1 (Repeticiones)"}
             dataPath={"heat1"}
             dataRate={10000}
@@ -34,6 +35,7 @@ export default function EstatusMensual2() {
 
         <Box>
           <HeatMapAntChart
+            serverType={"charts"}
             chartName={"Heatmap 1-1 (Promedio Peso)"}
             dataPath={"heat11"}
             dataRate={10000}
@@ -44,6 +46,7 @@ export default function EstatusMensual2() {
       <div className="col-span-1 flex flex-col gap-4">
         <Box>
           <HeatMapAntChart
+          serverType={"charts"}
             chartName={"Heatmap 2 (Repeticiones)"}
             dataPath={"heat2"}
           />
@@ -51,6 +54,7 @@ export default function EstatusMensual2() {
 
         <Box>
           <HeatMapAntChart
+            serverType={"charts"}
             chartName={"Heatmap 2-2 (Promedio Peso)"}
             dataPath={"heat22"}
             dataRate={10000}

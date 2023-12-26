@@ -10,7 +10,7 @@ import DatePickerComponent from "./components/DatePicker";
 import RefreshButton from "./components/RefreshButton";
 import SubmitButton from "./components/SubmitButton";
 import layoutImage from "../images/layout.jpg";
-import { getHostPath } from "../../utils/host";
+
 import useLocalStorage from "use-local-storage";
 import { InputNumber, Space, Select } from "antd";
 import { Button, DatePicker, Form, TimePicker } from "antd";
@@ -20,6 +20,7 @@ export default function HeatMapAntChart({
   chartName,
   dataPath,
   dataRate = 10000,
+  serverType = "charts",
 }) {
   const [data, setData] = useLocalStorage(`${dataPath}`, []);
   // const [data, setData] = useState([]);
@@ -32,7 +33,7 @@ export default function HeatMapAntChart({
   const fetchData = ({ filters }) => {
     if (!isFetching) {
       setIsFetching(true);
-      fetch(getHostPath(dataPath), {
+      fetch(`api/${serverType}/${dataPath}`, {
         method: "POST",
         body: JSON.stringify({ filters }),
         headers: {
@@ -41,9 +42,9 @@ export default function HeatMapAntChart({
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          console.log(data.payload);
 
-          setData(data);
+          setData(data.payload);
           setIsFetching(false);
 
           // setPosts(data);
@@ -143,32 +144,25 @@ export default function HeatMapAntChart({
 export function NumberRange({ label1, label2, units, width, value, onChange }) {
   const on1Change = (val) => {
     const current = value ? [...value] : [];
-    current[0] = val;
-
-    if (current[0] > current[1]) {
-      alert("El valor inicial no puede ser mayor al valor final");
-      current[0] = current[1];
-    }
-    if (current[0] === null) {
-      current[0] = 0;
-      console.log("here");
-    }
-
+    current[0] = val === null ? 0 : val;
     onChange(current);
   };
-
+  
   const on2Change = (val) => {
     const current = value ? [...value] : [];
-    current[1] = val;
-    if (current[0] > current[1]) {
-      alert("El valor inicial no puede ser mayor al valor final");
-      current[1] = current[0];
-    }
-    if (current[1] === null) {
-      current[1] = 0;
-    }
+    current[1] = val === null ? 0 : val;
     onChange(current);
   };
+  
+  // const onSubmit = () => {
+  //   if (value[0] > value[1]) {
+  //     alert("El valor inicial no puede ser mayor al valor final");
+  //     return;
+  //   }
+  
+  // };
+
+
   return (
     <Space.Compact block style={{ width: width }}>
       <InputNumber

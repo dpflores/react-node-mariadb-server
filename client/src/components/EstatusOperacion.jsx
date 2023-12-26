@@ -27,6 +27,7 @@ export default function EstatusOperacion() {
       <div className="flex flex-row gap-4 w-full">
         <Box>
           <RealTimeChart
+            serverType={"charts"}
             chartName={"Monitoreo general de condiciones"}
             dataPath={"realtime"}
             dataRate={1000}
@@ -36,7 +37,7 @@ export default function EstatusOperacion() {
 
       <div className="flex flex-row gap-4 w-full">
         <Box>
-          <DownloadData dataPath={"download"} />
+          <DownloadData dataPath={"download"} serverType={"utils"}/>
         </Box>
       </div>
     </div>

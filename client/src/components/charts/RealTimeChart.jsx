@@ -5,7 +5,6 @@ import StockChart from "./highcharts/Stock";
 import Highcharts from "highcharts/highstock";
 import { ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
-import { getHostPath } from "../../utils/host";
 import DatePickerComponent from "./components/DatePicker";
 import RefreshButton from "./components/RefreshButton";
 import useLocalStorage from "use-local-storage";
@@ -37,6 +36,7 @@ export default function RealTimeChart({
   chartName,
   dataPath,
   dataRate = 10000,
+  serverType = "charts",
 }) {
   const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
   const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
@@ -68,7 +68,7 @@ export default function RealTimeChart({
   const fetchData = () => {
     if (!isFetching) {
       setIsFetching(true);
-      fetch(getHostPath(dataPath), {
+      fetch(`api/${serverType}/${dataPath}`, {
         method: "POST",
         body: JSON.stringify({ dateRange }),
         headers: {

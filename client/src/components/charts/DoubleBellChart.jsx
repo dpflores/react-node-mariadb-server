@@ -5,8 +5,7 @@ import { ResponsiveContainer } from "recharts";
 import DatePickerComponent from "./components/DatePicker";
 import RefreshButton from "./components/RefreshButton";
 import { useState } from "react";
-import { useEffect } from "react";
-import { getHostPath } from "../../utils/host";
+
 import useLocalStorage from "use-local-storage";
 
 require("highcharts/modules/histogram-bellcurve")(Highcharts);
@@ -79,7 +78,7 @@ function getBellData(datos) {
   return { valoresX, valoresY };
 }
 
-export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
+export default function BellChart({ chartName, dataPath, dataRate = 10000, serverType = "charts" }) {
   const { valoresX, valoresY } = getIdealData(100, 20);
 
   const [datax, setDataX] = useLocalStorage(`${dataPath}`, [0]);
@@ -118,7 +117,7 @@ export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
   const fetchData = () => {
     if (!isFetching) {
       setIsFetching(true);
-      fetch(getHostPath(dataPath), {
+      fetch(`api/${serverType}/${dataPath}`, {
         method: "POST",
         body: JSON.stringify({ dateRange }),
         headers: {
@@ -127,7 +126,7 @@ export default function BellChart({ chartName, dataPath, dataRate = 10000 }) {
       })
         .then((res) => res.json())
         .then((data) => {
-          const { valoresX, valoresY } = getBellData(data);
+          const { valoresX, valoresY } = getBellData(data.payload);
           setDataX(valoresX);
           setDataY(valoresY);
           console.log(valoresX);

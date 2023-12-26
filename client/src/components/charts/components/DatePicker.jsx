@@ -10,19 +10,19 @@ const rangePresets = [
   //   },
   {
     label: "Última semana",
-    value: [dayjs().add(-7, "d"), dayjs()],
+    value: [dayjs().startOf("day").add(-7, "d"), dayjs().endOf("day")],
   },
   {
     label: "Últimas 2 semanas",
-    value: [dayjs().add(-14, "d"), dayjs()],
+    value: [dayjs().startOf("day").add(-14, "d"), dayjs().endOf("day")],
   },
   {
     label: "Último mes",
-    value: [dayjs().add(-30, "d"), dayjs()],
+    value: [dayjs().startOf("day").add(-30, "d"), dayjs().endOf("day")],
   },
   {
     label: "Últimos 3 meses",
-    value: [dayjs().add(-90, "d"), dayjs()],
+    value: [dayjs().startOf("day").add(-90, "d"), dayjs().endOf("day")],
   },
 ];
 

@@ -3,7 +3,7 @@ import DatePickerComponent from "../charts/components/DatePicker";
 import DownloadButton from "../charts/components/DownloadButton";
 import { useState } from "react";
 
-export default function DownloadData({ dataPath }) {
+export default function DownloadData({ dataPath, serverType}) {
   const [dates, setDates] = useState([]);
   const onRangeChange = (date_values, dateStrings) => {
     console.log(date_values);
@@ -21,7 +21,7 @@ export default function DownloadData({ dataPath }) {
           <DatePickerComponent onRangeChange={onRangeChange} />
         </div>
 
-        <DownloadButton dateRange={dates} dataPath={dataPath} />
+        <DownloadButton dateRange={dates} dataPath={dataPath} serverType={serverType} />
 
         {/* <RefreshButton /> */}
       </div>

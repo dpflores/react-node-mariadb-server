@@ -20,13 +20,13 @@ function downloadCSV(csv, filename) {
   document.body.removeChild(downloadLink);
 }
 
-export default function DownloadButton({ dataPath, dateRange, width = "15%" }) {
+export default function DownloadButton({ dataPath, dateRange, width = "15%", serverType = "charts" }) {
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchData = () => {
     if (!isFetching) {
       setIsFetching(true);
-      fetch(getHostPath(dataPath), {
+      fetch(`api/${serverType}/${dataPath}`, {
         method: "POST",
         body: JSON.stringify({ dateRange }),
         headers: {
@@ -37,7 +37,7 @@ export default function DownloadButton({ dataPath, dateRange, width = "15%" }) {
         .then((data) => {
           console.log(data);
 
-          downloadCSV(data.data, "data.csv");
+          downloadCSV(data.payload.data, `${data.payload.filename}`);
           setIsFetching(false);
 
           // setPosts(data);

@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
 import Plot from "react-plotly.js";
 import { useState } from "react";
-import { useEffect } from "react";
-import { getHostPath } from "../../utils/host";
+
 import DatePickerComponent from "./components/DatePicker";
 import RefreshButton from "./components/RefreshButton";
 import { ResponsiveContainer } from "recharts";
@@ -114,7 +113,7 @@ var traceInitUC = generateTrace(
 );
 var data_init = [traceInitUE, traceInitUC, traceInitNU]; //,traceInitM];
 
-export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
+export default function FrenquencyChart({ dataPath, chartName, dataRate, serverType }) {
   const [data_chart, setData] = useLocalStorage(`${dataPath}`, data_init);
   // const [data_chart, setData] = useState(data_init);
 
@@ -128,7 +127,7 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
   const fetchData = () => {
     if (!isFetching) {
       setIsFetching(true);
-      fetch(getHostPath(dataPath))
+      fetch(`api/${serverType}/${dataPath}`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -137,13 +136,13 @@ export default function FrenquencyChart({ dataPath, chartName, dataRate }) {
             trace.push(data_init[i]); // Copia los datos existentes de data_init
           }
           // trace = [...data_init];
-          for (var i = 0; i < data.length; i++) {
+          for (var i = 0; i < data.payload.length; i++) {
             var traceAdd = generateTrace(
-              data[i].hours,
-              data[i].month,
-              convertISOToReadableDateTime(data[i].fInit),
-              convertISOToReadableDateTime(data[i].fEnd),
-              data[i].state,
+              data.payload[i].hours,
+              data.payload[i].month,
+              convertISOToReadableDateTime(data.payload[i].fInit),
+              convertISOToReadableDateTime(data.payload[i].fEnd),
+              data.payload[i].state,
               false
             );
             trace.push(traceAdd);

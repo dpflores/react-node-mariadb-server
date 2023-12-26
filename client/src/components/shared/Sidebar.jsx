@@ -15,7 +15,7 @@ export default function Sidebar({ userRol }) {
   console.log(userRol);
   const handleLogout = () => {
     axios
-      .get("/api/logout")
+      .get("/api/auth/logout")
       .then((res) => {
         window.location.reload(true);
       })
