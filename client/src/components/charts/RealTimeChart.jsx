@@ -38,11 +38,11 @@ export default function RealTimeChart({
   dataRate = 10000,
   serverType = "charts",
 }) {
-  const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
-  const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
+  // const [data1, setData1] = useLocalStorage(`${dataPath}`, array1);
+  // const [data2, setData2] = useLocalStorage(`${dataPath}2`, array2);
 
-  // const [data1, setData1] = useState(array1);
-  // const [data2, setData2] = useState(array2);
+  const [data1, setData1] = useState(array1);
+  const [data2, setData2] = useState(array2);
 
   const [dateRange, setDates] = useState([]);
 
